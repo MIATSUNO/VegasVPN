@@ -36,7 +36,7 @@ jobs:
           fi
       - uses: gradle/actions/setup-gradle@v4
       - name: Verify project structure
-        run: python3 tests/verify_project.py
+        run: python3 tests/verify_las_vegas.py
       - name: Verify experimental VPN Gate policy
         run: python3 tests/verify_experimental_gate.py
       - name: Verify experimental isolation
