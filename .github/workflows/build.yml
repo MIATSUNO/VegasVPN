@@ -22,84 +22,44 @@ jobs:
           packages: ''
       - name: Install Android SDK packages
         run: sdkmanager 'platforms;android-35' 'build-tools;34.0.0'
-      - name: Unzip and rename Las Vegas project
+      - name: Extract and brand project
+        run: python3 -m zipfile -e vegas-projeto-completo-trabalho.zip . && chmod +x gradlew && python3 -c "from pathlib import Path; p=Path('app/src/main/res/values/strings.xml'); s=p.read_text(); s=s.replace('<string name=\"app_name\">Vegas</string>','<string name=\"app_name\">Las Vegas</string>').replace('Servidores VEGAS','Servidores LAS VEGAS').replace('Vegas VPN</string>','Las Vegas VPN</string>').replace('Status Vegas</string>','Status Las Vegas</string>').replace('Configurar widget Vegas</string>','Configurar widget Las Vegas</string>'); p.write_text(s); p=Path('app/src/main/res/layout/activity_main.xml'); s=p.read_text().replace('android:text=\"VEGAS\"','android:text=\"LAS VEGAS\"').replace('Vegas • alimentação VPN Gate','Las Vegas • catálogo VPN Gate').replace('Widget Vegas','Widget Las Vegas').replace('Os servidores são operados por voluntários Vegas -  VPN Gate','Os servidores são operados por voluntários do VPN Gate'); p.write_text(s); p=Path('app/src/main/res/layout/tela_introducao.xml'); p.write_text(p.read_text().replace('android:text=\"VEGAS\"','android:text=\"LAS VEGAS\"')); p=Path('app/src/main/java/br/com/vegas/independente/MainActivity.kt'); p.write_text(p.read_text().replace('removeCall1backs','removeCallbacks').replace('Bem vindo ao Vegas VPN','Bem-vindo ao Las Vegas VPN')); p=Path('app/src/main/java/br/com/vegas/independente/ServerCardText.kt'); p.write_text(p.read_text().replace('servidor Vegas - VPN GATE  indisponível','servidor Las Vegas — VPN Gate indisponível')); p=Path('settings.gradle.kts'); p.write_text(p.read_text().replace('VegasIndependente','LasVegas'))"
+      - name: Add project README and public license
         run: |
-          python3 -m zipfile -e vegas-projeto-completo-trabalho.zip .
-          python3 - <<'PY'
-          from pathlib import Path
-          import shutil, xml.etree.ElementTree as ET
-          p=Path('app/src/main/res/values/strings.xml')
-          s=p.read_text()
-          s=s.replace('<string name="app_name">Vegas</string>','<string name="app_name">Las Vegas</string>')
-          s=s.replace('Servidores VEGAS','Servidores LAS VEGAS')
-          s=s.replace('Vegas VPN</string>','Las Vegas VPN</string>')
-          s=s.replace('Status Vegas</string>','Status Las Vegas</string>')
-          s=s.replace('Configurar widget Vegas</string>','Configurar widget Las Vegas</string>')
-          s=s.replace('A consulta usa HTTPS e envia seu endereço IP ao fundo VPN Gate, onde registrar acessos à lista(histórico). Os servidores são mantidos por uma rede de voluntários, podem registrar conexões com a Vegas. Continuar?','A consulta busca o catálogo público do VPN Gate por HTTPS. O serviço informa que pode registrar acessos à lista; os servidores são operados por voluntários. Quer continuar?')
-          p.write_text(s)
-          p=Path('app/src/main/res/layout/activity_main.xml')
-          s=p.read_text().replace('android:text="VEGAS"','android:text="LAS VEGAS"')
-          s=s.replace('Vegas • alimentação VPN Gate','Las Vegas • catálogo VPN Gate').replace('Widget Vegas','Widget Las Vegas')
-          s=s.replace('Os servidores são operados por voluntários Vegas -  VPN Gate','Os servidores são operados por voluntários do VPN Gate')
-          p.write_text(s)
-          p=Path('app/src/main/res/layout/tela_introducao.xml');p.write_text(p.read_text().replace('android:text="VEGAS"','android:text="LAS VEGAS"'))
-          p=Path('app/src/main/java/br/com/vegas/independente/MainActivity.kt');p.write_text(p.read_text().replace('removeCall1backs','removeCallbacks').replace('Bem vindo ao Vegas VPN','Bem-vindo ao Las Vegas VPN'))
-          p=Path('app/src/main/java/br/com/vegas/independente/ServerCardText.kt');p.write_text(p.read_text().replace('servidor Vegas - VPN GATE  indisponível','servidor Las Vegas — VPN Gate indisponível'))
-          p=Path('settings.gradle.kts');p.write_text(p.read_text().replace('VegasIndependente','LasVegas'))
-          Path('README.md').write_text('''# Las Vegas
+          cat > README.md <<'EOF'
+          # Las Vegas
 
-**Las Vegas** é um aplicativo Android com catálogo comunitário de servidores **VPN Gate**, consulta sob demanda, triagem de perfis e controle direto do usuário.
+          **Las Vegas** é um aplicativo Android com catálogo comunitário de servidores **VPN Gate**, consulta sob demanda, triagem dos perfis e controle direto do usuário.
 
-## Destaques
-- Consulta manual do catálogo VPN Gate por HTTPS, iniciada após confirmação.
-- Servidores organizados por país, endereço, operador declarado, ping e velocidade.
-- Triagem dos perfis antes da seleção.
-- Fluxo experimental OpenVPN em build de desenvolvimento e consentimento integrado ao Android.
-- Tela inicial e widget para acompanhar o estado da consulta.
-- Interface em português, dados do catálogo processados em memória, testes offline e build automatizado pelo GitHub Actions.
+          ## Destaques
+          - Consulta manual do catálogo VPN Gate por HTTPS, iniciada após confirmação.
+          - Servidores organizados por país, endereço, operador declarado, ping e velocidade.
+          - Triagem dos perfis recebidos antes da seleção.
+          - Fluxo experimental OpenVPN em build de desenvolvimento, com consentimento do Android.
+          - Tela inicial e widget para acompanhar a consulta.
+          - Interface em português, testes offline e compilação automatizada pelo GitHub Actions.
 
-**Servidores Gate** refere-se ao catálogo público do VPN Gate, cujos servidores são operados por voluntários.
+          **Servidores Gate** refere-se ao catálogo público do VPN Gate, cujos servidores são operados por voluntários.
 
-## Compilar
-Requisitos: JDK 17, Android SDK API 35 e build-tools 34.0.0.
-```sh
-./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon
-```
+          ## Compilar
+          Requisitos: JDK 17, Android SDK API 35 e build-tools 34.0.0.
+          ```sh
+          ./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon
+          ```
 
-## Testes
-```sh
-python3 tests/verify_experimental_gate.py
-python3 tests/verify_isolation.py
-python3 tests/run_java_tests.py
-```
-
-## Licença
-O projeto é distribuído sob **GNU General Public License v2.0 only**. Consulte [LICENSE](LICENSE). O motor OpenVPN mantém seus avisos em [openvpn-engine/LICENSE](openvpn-engine/LICENSE); os demais componentes mantêm os avisos de seus autores.
-
-Pull requests são bem-vindos. Preserve os avisos de licença dos componentes utilizados.
-''',encoding='utf8')
-          shutil.copyfile('openvpn-engine/LICENSE','LICENSE')
-          old=Path('.github/workflows/android-debug.yml')
-          if old.exists(): old.unlink()
-          for p in Path('app/src/main').rglob('*.xml'): ET.parse(p)
-          Path('tests/verify_project.py').write_text('from pathlib import Path\nimport xml.etree.ElementTree as ET\nr=Path(__file__).resolve().parent.parent\nfor p in (r/"app/src/main").rglob("*.xml"): ET.parse(p)\ns=ET.parse(r/"app/src/main/res/values/strings.xml").getroot()\nassert s.find("string[@name=\'app_name\']").text==\'Las Vegas\'\nassert (r/"LICENSE").is_file() and (r/"README.md").is_file()\nprint("OK: Las Vegas branding, docs and Android XML")\n')
-          Path('gradlew').chmod(0o755)
-          Path('vegas-projeto-completo-trabalho.zip').unlink(missing_ok=True)
-          PY
+          ## Licença
+          Distribuído sob **GNU General Public License v2.0 only**. Consulte [LICENSE](LICENSE). O motor OpenVPN mantém sua licença em [openvpn-engine/LICENSE](openvpn-engine/LICENSE), e cada componente conserva os avisos de seus autores.
+          EOF
+          cp openvpn-engine/LICENSE LICENSE
+          rm -f .github/workflows/android-debug.yml vegas-projeto-completo-trabalho.zip
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
-          git commit -m 'Open-source Las Vegas Android project' || true
+          git commit -m 'Publish Las Vegas open-source source and documentation' || true
           git push origin HEAD:main
       - uses: gradle/actions/setup-gradle@v4
-      - name: Verify project structure
-        run: python3 tests/verify_project.py
-      - name: Verify experimental VPN Gate policy
-        run: python3 tests/verify_experimental_gate.py
-      - name: Verify experimental isolation
-        run: python3 tests/verify_isolation.py
-      - name: Run offline Java tests
-        run: python3 tests/run_java_tests.py
+      - name: Run source checks
+        run: python3 tests/verify_experimental_gate.py && python3 tests/verify_isolation.py && python3 tests/run_java_tests.py
       - name: Build and test Android app
         run: ./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon
       - uses: actions/upload-artifact@v4
