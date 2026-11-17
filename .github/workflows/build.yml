@@ -22,7 +22,7 @@ jobs:
           packages: ''
       - name: Install Android SDK packages
         run: sdkmanager 'platforms;android-35' 'build-tools;34.0.0'
-      - name: Extract source, apply Las Vegas identity and open-source docs
+      - name: Extract and publish the source tree
         if: ${{ github.event_name != 'pull_request' }}
         run: |
           if [ -f vegas-projeto-completo-trabalho.zip ]; then
@@ -35,7 +35,7 @@ jobs:
             git push origin HEAD:main
           fi
       - uses: gradle/actions/setup-gradle@v4
-      - name: Verify source files and XML
+      - name: Verify project structure
         run: python3 tests/verify_project.py
       - name: Verify experimental VPN Gate policy
         run: python3 tests/verify_experimental_gate.py
