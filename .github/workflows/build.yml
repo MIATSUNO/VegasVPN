@@ -26,31 +26,16 @@ jobs:
         run: python3 -m zipfile -e vegas-projeto-completo-trabalho.zip . && chmod +x gradlew && python3 -c "from pathlib import Path; p=Path('app/src/main/res/values/strings.xml'); s=p.read_text(); s=s.replace('<string name=\"app_name\">Vegas</string>','<string name=\"app_name\">Las Vegas</string>').replace('Servidores VEGAS','Servidores LAS VEGAS').replace('Vegas VPN</string>','Las Vegas VPN</string>').replace('Status Vegas</string>','Status Las Vegas</string>').replace('Configurar widget Vegas</string>','Configurar widget Las Vegas</string>'); p.write_text(s); p=Path('app/src/main/res/layout/activity_main.xml'); s=p.read_text().replace('android:text=\"VEGAS\"','android:text=\"LAS VEGAS\"').replace('Vegas • alimentação VPN Gate','Las Vegas • catálogo VPN Gate').replace('Widget Vegas','Widget Las Vegas').replace('Os servidores são operados por voluntários Vegas -  VPN Gate','Os servidores são operados por voluntários do VPN Gate'); p.write_text(s); p=Path('app/src/main/res/layout/tela_introducao.xml'); p.write_text(p.read_text().replace('android:text=\"VEGAS\"','android:text=\"LAS VEGAS\"')); p=Path('app/src/main/java/br/com/vegas/independente/MainActivity.kt'); p.write_text(p.read_text().replace('removeCall1backs','removeCallbacks').replace('Bem vindo ao Vegas VPN','Bem-vindo ao Las Vegas VPN')); p=Path('app/src/main/java/br/com/vegas/independente/ServerCardText.kt'); p.write_text(p.read_text().replace('servidor Vegas - VPN GATE  indisponível','servidor Las Vegas — VPN Gate indisponível')); p=Path('settings.gradle.kts'); p.write_text(p.read_text().replace('VegasIndependente','LasVegas'))"
       - name: Add project README and public license
         run: |
-          cat > README.md <<'EOF'
-          # Las Vegas
-
-          **Las Vegas** é um aplicativo Android com catálogo comunitário de servidores **VPN Gate**, consulta sob demanda, triagem dos perfis e controle direto do usuário.
-
-          ## Destaques
-          - Consulta manual do catálogo VPN Gate por HTTPS, iniciada após confirmação.
-          - Servidores organizados por país, endereço, operador declarado, ping e velocidade.
-          - Triagem dos perfis recebidos antes da seleção.
-          - Fluxo experimental OpenVPN em build de desenvolvimento, com consentimento do Android.
-          - Tela inicial e widget para acompanhar a consulta.
-          - Interface em português, testes offline e compilação automatizada pelo GitHub Actions.
-
-          **Servidores Gate** refere-se ao catálogo público do VPN Gate, cujos servidores são operados por voluntários.
-
-          ## Compilar
-          Requisitos: JDK 17, Android SDK API 35 e build-tools 34.0.0.
-          ```sh
-          ./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon
-          ```
-
-          ## Licença
-          Distribuído sob **GNU General Public License v2.0 only**. Consulte [LICENSE](LICENSE). O motor OpenVPN mantém sua licença em [openvpn-engine/LICENSE](openvpn-engine/LICENSE), e cada componente conserva os avisos de seus autores.
-          EOF
-          cp openvpn-engine/LICENSE LICENSE
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          import shutil
+          Path('README.md').write_text('# Las Vegas\n\nLas Vegas é um aplicativo Android com catálogo comunitário de servidores VPN Gate, consulta sob demanda, triagem de perfis e controle direto do usuário.\n\n## Destaques\n\n- Consulta manual ao catálogo VPN Gate por HTTPS, após confirmação.\n- Servidores organizados por país, endereço, operador declarado, ping e velocidade.\n- Triagem dos perfis recebidos antes da seleção.\n- Fluxo experimental OpenVPN em build de desenvolvimento, com consentimento do Android.\n- Tela inicial, widget e compilação automatizada pelo GitHub Actions.\n\nServidores Gate são os servidores comunitários listados pelo VPN Gate.\n\n## Compilar\n\nRequisitos: JDK 17, Android SDK API 35 e build-tools 34.0.0.\n\n```sh\n./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon\n```\n\n## Licença\n\nGNU General Public License v2.0 only. Consulte LICENSE e openvpn-engine/LICENSE.\n', encoding='utf-8')
+          shutil.copyfile('openvpn-engine/LICENSE', 'LICENSE')
+          Path('gradlew').chmod(0o755)
+          for path in (Path('app/src/main')).rglob('*.xml'):
+              import xml.etree.ElementTree as ET
+              ET.parse(path)
+          PYCODE
           rm -f .github/workflows/android-debug.yml vegas-projeto-completo-trabalho.zip
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
