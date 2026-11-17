@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ android:gravity="center"
+ android:padding="28dp"
+ android:background="@color/sand"
+ android:clickable="true"
+ android:focusable="true">
+
+ <TextView
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:gravity="center"
+ android:text="LAS VEGAS"
+ android:textColor="@color/petrol"
+ android:textSize="38sp"
+ android:textStyle="bold" />
+
+ <TextView
+ android:id="@+id/texto_intro"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_marginTop="32dp"
+ android:textColor="@color/petrol_dark"
+ android:textSize="17sp" />
+
+ <Button
+ android:id="@+id/botao_intro"
+ android:visibility="invisible"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginTop="24dp"
+ android:text="Pular"
+ android:textAllCaps="false" />
+</LinearLayout>

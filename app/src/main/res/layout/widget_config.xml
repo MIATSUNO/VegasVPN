@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/sand" android:orientation="vertical" android:padding="24dp"
+    android:fitsSystemWindows="true">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/widget_config_title" android:textColor="@color/petrol_dark" android:textSize="24sp" android:textStyle="bold" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp"
+        android:text="@string/widget_config_description" android:textColor="@color/petrol_dark" android:textSize="16sp" />
+    <CheckBox android:id="@+id/widget_show_hint" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" android:minHeight="48dp" android:text="@string/widget_config_hint"
+        android:textColor="@color/petrol_dark" />
+    <Button android:id="@+id/widget_save" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" android:minHeight="48dp" android:text="@string/widget_config_save" android:textAllCaps="false" />
+</LinearLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sand">#F4EBDD</color>
+    <color name="white">#FFFFFF</color>
+    <color name="petrol">#123F49</color>
+    <color name="petrol_dark">#0C3038</color>
+    <color name="coral">#D96454</color>
+    <color name="muted">#46626A</color>
+</resources>
