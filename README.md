@@ -1,19 +1,18 @@
 # Las Vegas
 
-**Las Vegas** é um aplicativo Android com catálogo comunitário de servidores **VPN Gate**, consulta sob demanda, triagem dos perfis e controle direto do usuário.
+**Las Vegas VPN** é um aplicativo Android voltado à consulta e seleção de servidores comunitários do **VPN Gate**.
 
-## Destaques
-- Consulta manual do catálogo VPN Gate por HTTPS, iniciada após confirmação.
-- Servidores organizados por país, endereço, operador declarado, ping e velocidade.
-- Triagem dos perfis recebidos antes da seleção.
-- Fluxo experimental OpenVPN em build de desenvolvimento, com consentimento do Android.
-- Tela inicial e widget para acompanhar a consulta.
-- Interface em português, testes offline e compilação automatizada pelo GitHub Actions.
+## Recursos
+- Consulta do catálogo VPN Gate sob demanda.
+- Lista de servidores com país, endereço, ping e velocidade informados pelo catálogo.
+- Seleção de servidor e interface em português.
+- Tela inicial, configurações e widget Las Vegas.
 
-**Servidores Gate** refere-se ao catálogo público do VPN Gate, cujos servidores são operados por voluntários.
+Os **servidores Gate** são operados por voluntários.
 
-## Compilar
+## Compilação
 Requisitos: JDK 17, Android SDK API 35 e build-tools 34.0.0.
+
 ```sh
 ./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon
 ```

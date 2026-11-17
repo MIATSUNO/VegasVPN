@@ -13,7 +13,7 @@ class ServerCardTextTest {
         assertEquals("Servidor da sessão indisponível", ServerCardText.label(true, false, null))
     }
     @Test fun fixtureNeverDisplaysGateSelection() {
-        assertEquals("Teste local — servidor VPN Gate indisponível", ServerCardText.label(false, true, "servidor antigo"))
+        assertEquals("Iniciar localmente — servidor Las Vegas — VPN Gate indisponível", ServerCardText.label(false, true, "servidor antigo"))
     }
     @Test fun retentionRequiresInactiveAndSameObjectInCatalog() {
         assertTrue(ServerCardText.mayRetain(false, false, true))
