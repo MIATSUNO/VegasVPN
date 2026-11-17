@@ -22,71 +22,20 @@ jobs:
           packages: ''
       - name: Install Android SDK packages
         run: sdkmanager 'platforms;android-35' 'build-tools;34.0.0'
-      - name: Extract source into staging directory
-        run: mkdir -p /tmp/vegas-source && python3 -m zipfile -e vegas-projeto-completo-trabalho.zip /tmp/vegas-source
-      - name: Apply Las Vegas name, README and GPL license
+      - name: Extract source, apply Las Vegas identity and open-source docs
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import shutil
-          root=Path('/tmp/vegas-source')
-          def edit(rel, old, new):
-              p=root/rel; p.write_text(p.read_text().replace(old,new))
-          edit('app/src/main/res/values/strings.xml','<string name="app_name">Vegas</string>','<string name="app_name">Las Vegas</string>')
-          edit('app/src/main/res/values/strings.xml','Servidores VEGAS','Servidores LAS VEGAS')
-          edit('app/src/main/res/values/strings.xml','Vegas VPN</string>','Las Vegas VPN</string>')
-          edit('app/src/main/res/values/strings.xml','Status Vegas</string>','Status Las Vegas</string>')
-          edit('app/src/main/res/values/strings.xml','Configurar widget Vegas</string>','Configurar widget Las Vegas</string>')
-          edit('app/src/main/res/layout/activity_main.xml','android:text="VEGAS"','android:text="LAS VEGAS"')
-          edit('app/src/main/res/layout/activity_main.xml','Vegas • alimentação VPN Gate','Las Vegas • catálogo VPN Gate')
-          edit('app/src/main/res/layout/activity_main.xml','Widget Vegas','Widget Las Vegas')
-          edit('app/src/main/res/layout/activity_main.xml','Os servidores são operados por voluntários Vegas -  VPN Gate','Os servidores são operados por voluntários do VPN Gate')
-          edit('app/src/main/res/layout/tela_introducao.xml','android:text="VEGAS"','android:text="LAS VEGAS"')
-          edit('app/src/main/java/br/com/vegas/independente/MainActivity.kt','removeCall1backs','removeCallbacks')
-          edit('app/src/main/java/br/com/vegas/independente/MainActivity.kt','Bem vindo ao Vegas VPN','Bem-vindo ao Las Vegas VPN')
-          edit('app/src/main/java/br/com/vegas/independente/ServerCardText.kt','servidor Vegas - VPN GATE  indisponível','servidor Las Vegas — VPN Gate indisponível')
-          edit('settings.gradle.kts','VegasIndependente','LasVegas')
-          (root/'README.md').write_text('''# Las Vegas
-
-Las Vegas é um aplicativo Android com catálogo comunitário de servidores VPN Gate, consulta sob demanda, triagem de perfis e controle direto do usuário.
-
-## Destaques
-- Consulta manual ao catálogo VPN Gate por HTTPS, iniciada após confirmação.
-- Servidores organizados por país, endereço, operador declarado, ping e velocidade.
-- Triagem de perfis recebidos antes da seleção.
-- Fluxo experimental OpenVPN em build de desenvolvimento, com consentimento do Android.
-- Tela inicial, widget, testes offline e compilação automatizada pelo GitHub Actions.
-
-**Servidores Gate** são os servidores comunitários listados pelo VPN Gate.
-
-## Compilar
-Requisitos: JDK 17, Android SDK API 35 e build-tools 34.0.0.
-```sh
-./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon
-```
-
-## Licença
-GNU General Public License v2.0 only. Consulte [LICENSE](LICENSE). O motor OpenVPN mantém sua licença em [openvpn-engine/LICENSE](openvpn-engine/LICENSE), e cada componente conserva os avisos dos autores.
-''',encoding='utf8')
-          shutil.copyfile(root/'openvpn-engine/LICENSE',root/'LICENSE')
-          (root/'gradlew').chmod(0o755)
-          old=root/'.github/workflows/android-debug.yml'
-          if old.exists(): old.unlink()
-          for p in root.glob('*.md'):
-              s=p.read_text(errors='replace').replace('Vegas VPN','Las Vegas VPN').replace('Vegas','Las Vegas').replace('VEGAS','LAS VEGAS')
-              p.write_text(s)
-          PY
-      - name: Install source tree and remove archive
-        run: |
-          cp -a /tmp/vegas-source/. .
-          rm -f vegas-projeto-completo-trabalho.zip
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          git commit -m 'Publish Las Vegas open-source source and documentation' || true
-          git push origin HEAD:main
+          if [ -f vegas-projeto-completo-trabalho.zip ]; then
+            python3 .github/scripts/open_source_project.py
+            rm -f vegas-projeto-completo-trabalho.zip
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add -A
+            git commit -m 'Publish Las Vegas open-source source and documentation' || true
+            git push origin HEAD:main
+          fi
       - uses: gradle/actions/setup-gradle@v4
-      - name: Verify project structure
+      - name: Verify source files and XML
         run: python3 tests/verify_project.py
       - name: Verify experimental VPN Gate policy
         run: python3 tests/verify_experimental_gate.py
