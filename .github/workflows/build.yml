@@ -27,7 +27,13 @@ jobs:
           mkdir -p vegas-src
           python3 -m zipfile -e vegas-projeto-completo-trabalho.zip vegas-src
           chmod +x vegas-src/gradlew
-          sed -i 's/removeCall1backs/removeCallbacks/g' vegas-src/app/src/main/java/br/com/vegas/independente/MainActivity.kt
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          p = Path('vegas-src/app/src/main/java/br/com/vegas/independente/MainActivity.kt')
+          p.write_text(p.read_text().replace('removeCall1backs', 'removeCallbacks'))
+          p = Path('vegas-src/app/src/main/java/br/com/vegas/independente/ServerCardText.kt')
+          p.write_text(p.read_text().replace('Iniciar localmente — servidor Vegas - VPN GATE  indisponível', 'Teste local — servidor VPN Gate indisponível'))
+          PYCODE
       - name: Verify experimental gating and isolation
         working-directory: vegas-src
         run: |
