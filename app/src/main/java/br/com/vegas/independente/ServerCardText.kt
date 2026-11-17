@@ -6,7 +6,7 @@ internal object ServerCardText {
         !gateActive && !fixtureActive && sameCatalogEntry
 
     fun label(gateActive: Boolean, fixtureActive: Boolean, selected: String?): String = when {
-        fixtureActive -> "Iniciar localmente — servidor Las Vegas — VPN Gate indisponível"
+        fixtureActive -> "Teste local — servidor VPN Gate indisponível"
         gateActive -> "Servidor da sessão indisponível"
         else -> selected ?: "Selecionar servidor"
     }
