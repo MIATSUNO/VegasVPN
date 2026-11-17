@@ -27,6 +27,7 @@ jobs:
           mkdir -p vegas-src
           python3 -m zipfile -e vegas-projeto-completo-trabalho.zip vegas-src
           chmod +x vegas-src/gradlew
+          sed -i 's/removeCall1backs/removeCallbacks/g' vegas-src/app/src/main/java/br/com/vegas/independente/MainActivity.kt
       - name: Verify experimental gating and isolation
         working-directory: vegas-src
         run: |
